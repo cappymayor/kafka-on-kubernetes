@@ -69,3 +69,13 @@ kubectl create secret generic postgres-credentials \
   --from-literal=password='mypassword'
   --namespace strimzi-kafka
 ```
+
+Deploy Postgres DB, Connect Cluster and Debezium Source Connector.
+```bash
+kubectl apply -f postgres-debezium.yaml
+```
+
+Deploy the s3 sink connector
+```bash
+kubectl apply -f s3-sink-connector.yaml
+```
