@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-db
+  namespace: strimzi-kafka
 spec:
   replicas: 1
   selector:
@@ -16,11 +17,24 @@ spec:
       containers:
         - name: postgres
           image: debezium/postgres:16
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "100Mi"
+            limits:
+              cpu: "500m"
+              memory: "500Mi"
           env:
             - name: POSTGRES_USER
-              value: postgresuser
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: username
             - name: POSTGRES_PASSWORD
-              value: postgrespassword
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
             - name: POSTGRES_DB
               value: inventory
           ports:
@@ -30,6 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
+  namespace: strimzi-kafka
 spec:
   selector:
     app: postgres
@@ -43,6 +58,7 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaConnect
 metadata:
   name: my-connect-cluster
+  namespace: strimzi-kafka
   annotations:
     strimzi.io/use-connector-resources: "true"
 spec:
@@ -109,6 +125,7 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaConnector
 metadata:
   name: postgres-source-connector
+  namespace: strimzi-kafka
   labels:
     strimzi.io/cluster: my-connect-cluster
 spec:
