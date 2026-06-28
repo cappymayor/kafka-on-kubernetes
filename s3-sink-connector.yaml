@@ -1,0 +1,27 @@
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaConnector
+metadata:
+  name: s3-sink-connector
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: io.confluent.connect.s3.S3SinkConnector
+  tasksMax: 1
+  config:
+    topics: inventory-stream.public.customers
+    
+    # Replace with your actual S3 details
+    s3.bucket.name: "kafka-on-kubernetes"
+    s3.region: "eu-central-1"
+    
+    # Flushes data to S3 after every 3 messages land in Kafka
+    flush.size: "3" 
+    
+    # Storage Formatter Rules (Writes flat, pure JSON text documents)
+    storage.class: io.confluent.connect.s3.storage.S3Storage
+    format.class: io.confluent.connect.s3.format.json.JsonFormat
+    schema.compatibility: NONE
+
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter.schemas.enable: "false"
