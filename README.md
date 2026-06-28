@@ -15,38 +15,38 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 
 
 
-Clone the repository.
+### 1. Clone the repository.
 ```bash
 git clone https://github.com/cappymayor/kafka-on-kubernetes.git
 ```
 
-Start Minikube with increased resource allocations from the CLI.
+### 2. Start Minikube with increased resource allocations from the CLI.
 ```bash
 minikube start --cpus 4 --memory 8000
 ```
 
-Create a dedicated kubernetes namespace.
+### 3. Create a dedicated kubernetes namespace.
 ```bash
 kubectl create ns strimzi-kafka
 ```
 
-Install the strimzi operator chart dependency.
+### 4. Install the strimzi operator chart dependency.
 ```bash
 helm dependency build
 ```
 
-Install the strimzi operator chart. Make sure the command is ran in the directory where the `Chart.yaml` is located.
+### 5. Install the strimzi operator chart. Make sure the command is ran in the directory where the `Chart.yaml` is located.
 ```bash
 helm install strimzi-operator . --namespace strimzi-kafka
 ```
-After the strimzi operator is in `running` and `ready` state, next is to deploy Kafka cluster and the Kafka connector stacks.
+### 6. After the strimzi operator is in `running` and `ready` state, next is to deploy Kafka cluster and the Kafka connector stacks.
 
-Install the strimzi operator chart dependency.
+### 7. Install the strimzi operator chart dependency.
 ```bash
 kubectl apply -f kafka-cluster.yaml
 ```
 
-Lets create all secrets that will be used by our stacks.
+### 8. Lets create all secrets that will be used by our stacks.
 ```bash
 kubectl create secret generic aws-s3-credentials \
   --from-literal=AWS_ACCESS_KEY_ID="your_aws_access_key" \
@@ -69,19 +69,19 @@ kubectl create secret generic postgres-credentials \
   --namespace strimzi-kafka
 ```
 
-Deploy Postgres DB, Connect Cluster and Debezium Source Connector.
+### 9. Deploy Postgres DB, Connect Cluster and Debezium Source Connector.
 ```bash
 kubectl apply -f postgres-debezium.yaml
 ```
 
-Deploy the s3 sink connector
+### 10. Deploy the s3 sink connector
 ```bash
 kubectl apply -f s3-sink-connector.yaml
 ```
 
 ## Test the full pipeline
 
-Create a table in the postgres database
+### 1. Create a table in the postgres database
 ```bash
 kubectl exec -it deployment/postgres-db -n strimzi-kafka -- \
   psql -U myusername -d inventory -c \
@@ -93,7 +93,7 @@ kubectl exec -it deployment/postgres-db -n strimzi-kafka -- \
    );"
 ```
 
-Write some test record to the table
+### 2. Write some test record to the table
 ```bash
 kubectl exec -it deployment/postgres-db -n strimzi-kafka -- \
 psql -U myusername -d inventory -c "
