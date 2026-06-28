@@ -9,7 +9,8 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 - Local `Kubernetes cluster` like Minikube
 - Install Kubectl
 - Install Helm
-- Create a repository on Dockerhub
+- Create a repository on Dockerhub `my-connect-cluster-debezium`
+  - Be sure to [change this line](https://github.com/cappymayor/kafka-on-kubernetes/blob/master/postgres-debezium.yaml#L101) to match your dockerhub username after cloning.
 - Create an s3 bucket on AWS called `kafka-on-kubernetes`
 - Create a user and grant write access to the bucket ( Will be used by the connector )
   - Create an Access and Secret Key for that user.
@@ -79,3 +80,31 @@ Deploy the s3 sink connector
 ```bash
 kubectl apply -f s3-sink-connector.yaml
 ```
+
+## Test the full pipeline
+
+Create a table in the postgres database
+```bash
+kubectl exec -it deployment/postgres-db -n strimzi-kafka -- \
+  psql -U myusername -d inventory -c \
+  "CREATE TABLE public.customers (
+     id SERIAL PRIMARY KEY,
+     first_name VARCHAR(255),
+     last_name VARCHAR(255),
+     email VARCHAR(255)
+   );"
+```
+
+Write some test record to the table
+```bash
+kubectl exec -it deployment/postgres-db -n strimzi-kafka -- \
+psql -U myusername -d inventory -c "
+INSERT INTO public.customers (first_name, last_name, email) VALUES 
+('Elena', 'Rostova', 'elena.rostova@example.com'),
+('Marcus', 'Vance', 'mvance@example.com'),
+('Aiko', 'Tanaka', 'aiko_t@example.com'),
+('Mateo', 'Silva', 'msilva@example.com'),
+('Chloe', 'Dupont', 'chloe.dupont@example.com');"
+```
+
+Verify the write in your s3 bucket
