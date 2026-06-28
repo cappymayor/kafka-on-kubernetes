@@ -1,5 +1,3 @@
-# HOW TO RUN THE SETUP
-
 ## Deployment with Strimzi & Helm
 
 This section outlines how to spin up the Kafka infrastructure using Strimzi and Helm on a local Kubernetes cluster.
