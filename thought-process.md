@@ -51,14 +51,3 @@ When approaching this assessment to deploy a production-ready Kafka Cluster on K
 **Why this matters:**
 * **Security & Git Ingestion:** Credentials are completely scrubbed from the source code, rendering manifests perfectly safe to commit to version control.
 * **Modern Strimzi v1 API Adherence:** Instead of utilizing deprecated configuration properties, secrets are dynamically injected as environment variables directly inside the Connect pod templates via the `template.connectContainer.env` block, utilizing Kafka's built-in `EnvVarConfigProvider`.
-
----
-
-### 6. Data Delivery Guarantees (At-Least-Once Handling)
-
-**Observation:** Transient connector restarts or infrastructure failures can lead to duplicate records in the final S3 target destination (e.g., duplicate rows across rotated files due to low batch limits).
-
-**Mitigation & Strategy:**
-* Kafka Connect guarantees **At-Least-Once** delivery out of the box, meaning it favors duplication over data loss during crashes.
-* To balance local performance against the "small file problem" in S3, I structured the `flush.size` alongside time-based rotation triggers (`rotate.interval.ms`). 
-* For downstream consumers requiring strict deduplication, the system is designed to allow analytical layers (e.g., Snowflake/Athena) to filter on Debezium's unique `source.lsn` identifier.
