@@ -100,7 +100,7 @@ spec:
     output:
       type: docker
       # Replace <YOUR_DOCKERHUB_USERNAME> with your exact username
-      image: docker.io/cappymayor/my-connect-cluster-debezium:v4
+      image: docker.io/cappymayor/my-connect-cluster-debezium:latest
       # Links to the secret you created in Step 1
       pushSecret: my-docker-credentials
     plugins:
