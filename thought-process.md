@@ -51,3 +51,17 @@ When approaching this assessment to deploy a production-ready Kafka Cluster on K
 **Why this matters:**
 * **Security & Git Ingestion:** Credentials are completely scrubbed from the source code, rendering manifests perfectly safe to commit to version control.
 * **Modern Strimzi v1 API Adherence:** Instead of utilizing deprecated configuration properties, secrets are dynamically injected as environment variables directly inside the Connect pod templates via the `template.connectContainer.env` block, utilizing Kafka's built-in `EnvVarConfigProvider`.
+
+---
+
+## Future Improvements & Pragmatic Trade-offs
+
+To keep the local environment lightweight, repeatable, and straightforward, I deliberately chose pragmatic engineering defaults over infrastructure complexity. In a true enterprise-scale production environment, I would advocate for the following advancements:
+
+### Secret Management Optimization
+* **Current State:** Credentials are created imperatively as a local Kubernetes Secret object. This avoids checking standard declarative YAML into Git, which is a risk since anyone can decode native base64-encoded strings.
+* **Production Improvement:** Deploy the **External Secrets Operator (ESO)** alongside a secure external store (like AWS Secrets Manager, HashiCorp Vault, or Google Secret Manager). This would allow secrets to be automatically and declaratively managed and synchronized across Kubernetes namespaces without exposing values in plaintext or base64 inside version control.
+
+### Topic Lifecycle Automation
+* **Current State:** Topics are left to be automatically initialized by the CDC framework (Debezium/Kafka Connect) as soon as new data streams or database schemas are discovered. 
+* **Production Improvement:** While Strimzi supports creating and tracking topics declaratively using the `KafkaTopic` custom resource object, doing so here would duplicate effort given that the CDC layer inherently generates its own mapping. For high-throughput production lines, I would transition to configuring the auto-creation properties specifically within the Kafka Connect runtime settings to pre-define deterministic partition counts and replication factors before traffic flows.
