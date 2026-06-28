@@ -1,0 +1,10 @@
+apiVersion: v2
+name: kafka-on-k8s
+description: Helm chart wrapping Strimzi Operator and Kafka core infrastructure
+type: application
+version: 1.0.0
+
+dependencies:
+  - name: strimzi-kafka-operator
+    version: 1.0.1
+    repository: https://strimzi.io/charts/
