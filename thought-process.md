@@ -33,6 +33,14 @@ When approaching this assessment to deploy a production-ready Kafka Cluster on K
 
 ---
 
+### 4. Database Workload (Deployment vs. StatefulSet)
+
+For the local prototyping phase using Minikube, the PostgreSQL source database was deployed using a standard Kubernetes `Deployment` with ephemeral storage. 
+
+#### Production Evolution
+In a proper multi-node production cluster, deploying a database via a standard `Deployment` introduces severe data loss risk. For the production rollout, we will evolve this into a **StatefulSet tied to a PersistentVolumeClaim (PVC)**, the manifest will be upgraded to utilize a dedicated cloud-native `StorageClass` (e.g., `gp3` on AWS EKS) to dynamically provision an Elastic Block Store.
+
+
 ### 4. Externalizing the Strimzi Operator (Upstream Helm Reference)
 
 **Decision:** I chose to point directly to the upstream Strimzi Helm repository rather than vendoring/copying all the operator template files into this repository alongside our custom `Chart.yaml` and `values.yaml` overrides.
