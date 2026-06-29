@@ -8,6 +8,7 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 - Install Kubectl
 - Install Helm
 - Create a repository on Dockerhub `connect-cluster-artifacts`
+  - Create an personal access token the connect cluster will use to write to the repository. Grant read and write, ideally write only is enough.
   - Be sure to [change this line](https://github.com/cappymayor/kafka-on-kubernetes/blob/master/postgres-debezium.yaml#L101) to match your dockerhub username after cloning.
 - Create an s3 bucket on AWS called `kafka-on-kubernetes`
 - Create a user and grant write access to the bucket ( Will be used by the connector )
