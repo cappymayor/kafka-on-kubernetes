@@ -6,6 +6,7 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 
 - Local `Kubernetes cluster` like Minikube installed.
 - Install Kubectl
+- Install K9s to see resource utilization and events.
 - Install Helm
 - Create a repository on Dockerhub `connect-cluster-artifacts`
   - Create an personal access token the connect cluster will use to write to the repository. Grant read and write, ideally write only is enough.
@@ -109,7 +110,7 @@ INSERT INTO public.customers (first_name, last_name, email) VALUES
 Verify the write in your s3 bucket.
 
 
-## Brokers and Connect objects resource Utilization
+## Brokers and Connect objects resource Utilization on K9S
 <img width="768" height="465" alt="Screenshot 2026-06-29 at 10 49 43" src="https://github.com/user-attachments/assets/88097311-5a7e-4707-b617-a35ae701538b" />
 
 
