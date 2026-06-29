@@ -25,10 +25,10 @@ When approaching this assessment to deploy a production-ready Kafka Cluster on K
 
 ### 3. Resource Management & Guaranteed QoS Class
 
-**Observation:** During early local testing, Kafka brokers experienced frequent JVM Out-Of-Memory (OOM) crashes due to default resource starvation.
+**Observation:** During early local testing, Kafka brokers experienced `OOMKilled` crashes due to resource starvation.
 
 **Mitigation & Strategy:**
-* **Guaranteed QoS Tiering:** I configured explicit Kubernetes resource `requests` and `limits` for both CPU and memory, ensuring they are mapped to **identical values**. 
+* **Guaranteed QoS class:** I configured explicit Kubernetes resource `requests` and `limits` for both CPU and memory, ensuring they are mapped to **identical values**. 
 * **Eviction Protection:** In Kubernetes, matching requests and limits automatically places the broker pods into the strict **Guaranteed Quality of Service (QoS)** class. In the event of cluster-wide resource starvation, the kubelet prioritizes evicting pods in the `BestEffort` or `Burstable` classes first. This safeguards our stateful Kafka infrastructure, ensuring the brokers are the absolute last pods to be terminated when the node is under pressure.
 
 ---
