@@ -105,4 +105,13 @@ INSERT INTO public.customers (first_name, last_name, email) VALUES
 ('Chloe', 'Dupont', 'chloe.dupont@example.com');"
 ```
 
-Verify the write in your s3 bucket
+Verify the write in your s3 bucket.
+
+
+## Brokers and Connect objects resource Utilization
+<img width="768" height="465" alt="Screenshot 2026-06-29 at 10 49 43" src="https://github.com/user-attachments/assets/88097311-5a7e-4707-b617-a35ae701538b" />
+
+
+
+
+
