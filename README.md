@@ -2,6 +2,10 @@
 
 This section outlines how to spin up the Kafka infrastructure using Strimzi and Helm on a local Kubernetes cluster.
 
+### High-level Architecture at a glance
+
+<img width="1446" height="644" alt="Screenshot 2026-06-29 at 12 07 01" src="https://github.com/user-attachments/assets/e0b0da84-69f8-4c02-874f-73cad9bdebfb" />
+
 ### prerequisites
 
 - Local `Kubernetes cluster` like Minikube installed.
