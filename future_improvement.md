@@ -4,7 +4,7 @@ To keep the local environment lightweight, repeatable, and straightforward, I de
 
 ### Secret Management Optimization
 * **Current State:** Credentials are created imperatively as a local Kubernetes Secret object. This avoids checking standard declarative YAML into Git, which is a risk since anyone can decode native base64-encoded strings.
-* **Production Improvement:** Deploy the **External Secrets Operator (ESO)** alongside a secure external store (like AWS Secrets Manager, HashiCorp Vault, or Google Secret Manager). This would allow secrets to be automatically and declaratively managed and synchronized across Kubernetes namespaces without exposing values in plaintext or base64 inside version control.
+* **Production Improvement:** Deploy the **External Secrets Operator (ESO)** alongside a secure external store (like AWS Secrets Manager, HashiCorp Vault). This would allow secrets to be automatically and declaratively managed and synchronized across Kubernetes namespaces without exposing values in plaintext or base64 inside version control.
 
 ### Topic Lifecycle Automation
 * **Current State:** Topics are left to be automatically initialized by the CDC framework (Debezium/Kafka Connect) as soon as new data streams or database schemas are discovered. 
