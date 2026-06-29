@@ -41,7 +41,7 @@ For the local prototyping phase using Minikube, the PostgreSQL source database w
 In a proper multi-node production cluster, deploying a database via a standard `Deployment` introduces severe data loss risk. For the production rollout, we will evolve this into a **StatefulSet tied to a PersistentVolumeClaim (PVC)**, the manifest will be upgraded to utilize a dedicated cloud-native `StorageClass` (e.g., `gp3` on AWS EKS) to dynamically provision an Elastic Block Store.
 
 
-### 4. Externalizing the Strimzi Operator (Upstream Helm Reference)
+### 5. Externalizing the Strimzi Operator (Upstream Helm Reference)
 
 **Decision:** I chose to point directly to the upstream Strimzi Helm repository rather than vendoring/copying all the operator template files into this repository alongside our custom `Chart.yaml` and `values.yaml` overrides.
 
@@ -52,24 +52,10 @@ In a proper multi-node production cluster, deploying a database via a standard `
 
 ---
 
-### 5. Decoupling Configuration and Infrastructure Secrets
+### 6. Decoupling Configuration and Infrastructure Secrets
 
 **Decision:** Hardcoded database credentials inside KafkaConnector YAML files were extracted and migrated to native Kubernetes Secrets.
 
 **Why this matters:**
 * **Security & Git Ingestion:** Credentials are completely scrubbed from the source code, rendering manifests perfectly safe to commit to version control.
 * **Modern Strimzi v1 API Adherence:** Instead of utilizing deprecated configuration properties, secrets are dynamically injected as environment variables directly inside the Connect pod templates via the `template.connectContainer.env` block, utilizing Kafka's built-in `EnvVarConfigProvider`.
-
----
-
-## Future Improvements & Pragmatic Trade-offs
-
-To keep the local environment lightweight, repeatable, and straightforward, I deliberately chose pragmatic engineering defaults over infrastructure complexity. In a true enterprise-scale production environment, I would advocate for the following advancements:
-
-### Secret Management Optimization
-* **Current State:** Credentials are created imperatively as a local Kubernetes Secret object. This avoids checking standard declarative YAML into Git, which is a risk since anyone can decode native base64-encoded strings.
-* **Production Improvement:** Deploy the **External Secrets Operator (ESO)** alongside a secure external store (like AWS Secrets Manager, HashiCorp Vault, or Google Secret Manager). This would allow secrets to be automatically and declaratively managed and synchronized across Kubernetes namespaces without exposing values in plaintext or base64 inside version control.
-
-### Topic Lifecycle Automation
-* **Current State:** Topics are left to be automatically initialized by the CDC framework (Debezium/Kafka Connect) as soon as new data streams or database schemas are discovered. 
-* **Production Improvement:** While Strimzi supports creating and tracking topics declaratively using the `KafkaTopic` custom resource object, doing so here would duplicate effort given that the CDC layer inherently generates its own mapping. For high-throughput production lines, I would transition to configuring the auto-creation properties specifically within the Kafka Connect runtime settings to pre-define deterministic partition counts and replication factors before traffic flows.
