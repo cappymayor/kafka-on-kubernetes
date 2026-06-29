@@ -7,7 +7,7 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 - Local `Kubernetes cluster` like Minikube installed.
 - Install Kubectl
 - Install Helm
-- Create a repository on Dockerhub `my-connect-cluster-debezium`
+- Create a repository on Dockerhub `connect-cluster-artifacts`
   - Be sure to [change this line](https://github.com/cappymayor/kafka-on-kubernetes/blob/master/postgres-debezium.yaml#L101) to match your dockerhub username after cloning.
 - Create an s3 bucket on AWS called `kafka-on-kubernetes`
 - Create a user and grant write access to the bucket ( Will be used by the connector )
@@ -54,7 +54,7 @@ kubectl create secret generic aws-s3-credentials \
   --namespace strimzi-kafka
 ```
 ```bash
- kubectl create secret docker-registry my-docker-credentials \
+ kubectl create secret docker-registry connector-docker-credentials \
   --docker-server=https://index.docker.io/v1/ \
   --docker-username=your_dockerhub_username \
   --docker-password=your_dockerhub_personal_access_token \

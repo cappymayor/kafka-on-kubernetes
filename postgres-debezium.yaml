@@ -18,11 +18,11 @@ spec:
           image: debezium/postgres:16
           resources:
             requests:
-              cpu: "100m"
+              cpu: "50m"
               memory: "100Mi"
             limits:
-              cpu: "500m"
-              memory: "500Mi"
+              cpu: "100m"
+              memory: "200Mi"
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -55,7 +55,7 @@ spec:
 apiVersion: kafka.strimzi.io/v1
 kind: KafkaConnect
 metadata:
-  name: my-connect-cluster
+  name: connect-cluster
   namespace: strimzi-kafka
   annotations:
     strimzi.io/use-connector-resources: "true"
@@ -98,8 +98,8 @@ spec:
   build:
     output:
       type: docker
-      image: docker.io/cappymayor/my-connect-cluster-debezium:latest
-      pushSecret: my-docker-credentials
+      image: docker.io/cappymayor/connect-cluster-artifacts:latest
+      pushSecret: connector-docker-credentials
     plugins:
       - name: debezium-postgres-connector
         artifacts:
@@ -126,7 +126,7 @@ metadata:
   name: postgres-source-connector
   namespace: strimzi-kafka
   labels:
-    strimzi.io/cluster: my-connect-cluster
+    strimzi.io/cluster: connect-cluster
 spec:
   class: io.debezium.connector.postgresql.PostgresConnector
   tasksMax: 1

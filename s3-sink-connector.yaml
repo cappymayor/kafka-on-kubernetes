@@ -4,7 +4,7 @@ metadata:
   name: s3-sink-connector
   namespace: strimzi-kafka
   labels:
-    strimzi.io/cluster: my-connect-cluster
+    strimzi.io/cluster: connect-cluster
 spec:
   class: io.confluent.connect.s3.S3SinkConnector
   tasksMax: 1
