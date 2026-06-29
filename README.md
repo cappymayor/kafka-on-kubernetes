@@ -4,7 +4,7 @@ This section outlines how to spin up the Kafka infrastructure using Strimzi and 
 
 ### prerequisites
 
-- Local `Kubernetes cluster` like Minikube
+- Local `Kubernetes cluster` like Minikube installed.
 - Install Kubectl
 - Install Helm
 - Create a repository on Dockerhub `my-connect-cluster-debezium`
