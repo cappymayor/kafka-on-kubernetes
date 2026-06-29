@@ -65,7 +65,7 @@ kubectl create secret generic aws-s3-credentials \
 kubectl create secret generic postgres-credentials \
   --namespace=strimzi-kafka \
   --from-literal=username='myusername' \
-  --from-literal=password='mypassword'
+  --from-literal=password='mypassword' \
   --namespace strimzi-kafka
 ```
 
